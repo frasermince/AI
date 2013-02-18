@@ -8,7 +8,7 @@
 using namespace std;
 
 int main(){
-	int num = 25;
+	int num = 30;
 	vector<Item> itemList;
 	Item temp();
 	/*Item one(23,92);
@@ -32,7 +32,7 @@ int main(){
 	itemList.push_back(nine);
 	itemList.push_back(ten);*/
 	fstream file;
-	file.open("/Users/Fraser/Desktop/Programming/Artificial Intelligence/AI/k_basic/k25.txt", fstream::in);
+	file.open("/Users/Fraser/Desktop/Programming/Artificial Intelligence/AI/k_basic/k30.txt", fstream::in);
 	int maxWeight;
 	file >> maxWeight;
 	double weight;

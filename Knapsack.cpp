@@ -45,7 +45,7 @@ void Knapsack::bruteMaxBound(){
 	greatest = bruteMaxBound(greatest);
 }
 
-Inventory Knapsack::bruteMaxBound(Inventory possibility){
+Inventory Knapsack::bruteMaxBound(Inventory& possibility){
 	Inventory copy = possibility;
 	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
@@ -71,7 +71,7 @@ void Knapsack::bruteMinBound(){
 	greatest = bruteMinBound(greatest);
 }
 
-Inventory Knapsack::bruteMinBound(Inventory possibility){
+Inventory Knapsack::bruteMinBound(Inventory& possibility){
 	Inventory copy = possibility;
 	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
@@ -100,7 +100,7 @@ void Knapsack::bruteDoubleBound(){
 	greatest = bruteDoubleBound(greatest);
 }
 
-Inventory Knapsack::bruteDoubleBound(Inventory possibility){
+Inventory Knapsack::bruteDoubleBound(Inventory& possibility){
 	Inventory copy = possibility;
 	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){

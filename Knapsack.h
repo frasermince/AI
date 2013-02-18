@@ -10,11 +10,11 @@ public:
 	void bruteForce();
 	Inventory bruteForce(Inventory& possibility);
 	void bruteMaxBound();
-	Inventory bruteMaxBound(Inventory possibility);
+	Inventory bruteMaxBound(Inventory& possibility);
 	void bruteMinBound();
-	Inventory bruteMinBound(Inventory possibility);
+	Inventory bruteMinBound(Inventory& possibility);
 	void bruteDoubleBound();
-	Inventory bruteDoubleBound(Inventory possibility);
+	Inventory bruteDoubleBound(Inventory& possibility);
 	Inventory greedy();
 	void print()											{greatest.print(itemList);}
 
