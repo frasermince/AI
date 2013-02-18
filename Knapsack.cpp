@@ -1,6 +1,7 @@
 #include "Item.h"
 #include "Inventory.h"
 #include "Knapsack.h"
+#include <ctime>
 #include <algorithm>
 #include <cassert>
 using namespace std;
@@ -8,10 +9,10 @@ using namespace std;
 
 void Knapsack::bruteForce(){
 	greatest.reset();
-	greatest = bruteDoubleBound(greatest);
+	greatest = bruteForce(greatest);
 }
 
-Inventory Knapsack::bruteForce(Inventory possibility){
+Inventory Knapsack::bruteForce(Inventory& possibility){
 	Inventory copy = possibility;
 	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
@@ -39,6 +40,11 @@ Inventory Knapsack::bruteForce(Inventory possibility){
 	}
 }
 
+void Knapsack::bruteMaxBound(){
+	greatest.reset();
+	greatest = bruteMaxBound(greatest);
+}
+
 Inventory Knapsack::bruteMaxBound(Inventory possibility){
 	Inventory copy = possibility;
 	//cout << "check" << endl;
@@ -58,6 +64,11 @@ Inventory Knapsack::bruteMaxBound(Inventory possibility){
 	}
 	else
 		return possibility;
+}
+
+void Knapsack::bruteMinBound(){
+	greatest.reset();
+	greatest = bruteMinBound(greatest);
 }
 
 Inventory Knapsack::bruteMinBound(Inventory possibility){
@@ -82,6 +93,11 @@ Inventory Knapsack::bruteMinBound(Inventory possibility){
 	}
 	else
 		return possibility;
+}
+
+void Knapsack::bruteDoubleBound(){
+	greatest.reset();
+	greatest = bruteDoubleBound(greatest);
 }
 
 Inventory Knapsack::bruteDoubleBound(Inventory possibility){

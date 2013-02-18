@@ -4,6 +4,7 @@ public:
 	Item(double w, double v)				{weight = w; value = v; ratio = 0;}
 	Item(const Item& other)					{weight = other.weight; value = other.value; ratio = other.ratio;}
 	Item	operator=(const Item& other)	{weight = other.weight; value = other.value; ratio = other.ratio; return *this;}
+	void	set(double w, double v)			{weight = w; value = v;}
 	double	getWeight()const				{return weight;}
 	double	getValue()const					{return value;}
 	double	getRatio()const					{return ratio;}
