@@ -13,7 +13,7 @@ public:
 	Inventory bruteMinBound(Inventory possibility);
 	Inventory bruteDoubleBound(Inventory possibility);
 	Inventory greedy();
-	Inventory dynamic();
+	void print()											{greatest.print(itemList);}
 
 private:
 	Inventory greatest;

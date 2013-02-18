@@ -26,13 +26,21 @@ Inventory Inventory::operator=(const Inventory& other){
 	weightLimit = other.getWeightLimit();
 	greatest = other.greatest;
 	options = other.options;
+	//cout << options[length] << endl;
 }
 
 bool Inventory::push(bool check, vector<Item>& itemList){
+	cout << greatest.getValue() << " <= " << itemList[length].getValue() << endl;
 	if (greatest.getWeight() + itemList[length].getWeight() <= weightLimit){
-		greatest.addTo(itemList[length].getWeight(), itemList[length].getValue());
+		if(check)
+			greatest.addTo(itemList[length].getWeight(), itemList[length].getValue());
 		options.set(length, check);
+		//cout << options[length] << endl;
+		//cout << check << endl;
 		length++;
+		/*for(int i = 0; i < length; i++)
+			cout << options[i];
+		cout << endl;*/
 		return true;
 	}
 	else { 

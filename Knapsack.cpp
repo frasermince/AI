@@ -8,28 +8,35 @@ using namespace std;
 
 void Knapsack::bruteForce(){
 	greatest.reset();
-	greatest = bruteForce(greatest);
+	greatest = bruteDoubleBound(greatest);
 }
 
 Inventory Knapsack::bruteForce(Inventory possibility){
 	Inventory copy = possibility;
 	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
+		//cout << "base "; 
+		//possibility.print(itemList); 
+		//cout << endl;
 		return possibility;
 	}
 
 	
-	possibility.print(itemList);
+	//possibility.print(itemList);
 	possibility.push(true, itemList);
 	possibility = bruteForce(possibility);
 	copy.push(false, itemList);
 	copy = bruteForce(copy);
 	//cout << "compare" << copy.getGreatest().value << " and " << possibility.getGreatest().value << endl;
+
 	if (copy.getGreatest().getValue() >= possibility.getGreatest().getValue()){
+		//copy.print(itemList);
 		return copy;
 	}
-	else
+	else{
+		//possibility.print(itemList);
 		return possibility;
+	}
 }
 
 Inventory Knapsack::bruteMaxBound(Inventory possibility){
@@ -40,7 +47,7 @@ Inventory Knapsack::bruteMaxBound(Inventory possibility){
 	}
 
 	
-	possibility.print(itemList);
+	//possibility.print(itemList);
 	if(possibility.push(true, itemList) == true)
 		possibility = bruteForce(possibility);
 	if(copy.push(false, itemList) == true)
@@ -57,14 +64,14 @@ Inventory Knapsack::bruteMinBound(Inventory possibility){
 	Inventory copy = possibility;
 	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
-		if(possibility.getGreatest() < greedy){
+		if(possibility.getGreatest() < greatest.getGreatest()){
 			possibility.setLow();
 		}
 		return possibility;
 	}
 
 	
-	possibility.print(itemList);
+	//possibility.print(itemList);
 	possibility.push(true, itemList) == true;
 	possibility = bruteForce(possibility);
 	copy.push(false, itemList) == true;
@@ -81,14 +88,14 @@ Inventory Knapsack::bruteDoubleBound(Inventory possibility){
 	Inventory copy = possibility;
 	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
-		if(possibility.getGreatest() < greedy){
+		if(possibility.getGreatest() < greatest.getGreatest()){
 			possibility.setLow();
 		}
 		return possibility;
 	}
 
 	
-	possibility.print(itemList);
+	//possibility.print(itemList);
 	if(possibility.push(true, itemList) == true)
 		possibility = bruteForce(possibility);
 	if(copy.push(false, itemList) == true)
@@ -116,6 +123,3 @@ Inventory Knapsack::greedy(){
 	return greatest;
 }
 
-Inventory dynamic(){
-
-}
