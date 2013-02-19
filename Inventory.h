@@ -20,7 +20,7 @@ public:
 private:
 	int length;
 	int weightLimit;
-	bitset<128> options;//construction?
+	bitset<64> options;//construction?
 	Item greatest;
 	bool low;
 };
