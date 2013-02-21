@@ -11,13 +11,15 @@ public:
 	void bruteForce();
 	Inventory bruteForce(Inventory& possibility);
 
+	void maxBound();
+	Inventory maxBound(Inventory& possibility);
+
 	void reversalPrune();
 	Inventory reversalPrune(Inventory& possibility);
 
-	void bruteMaxBound();
-	Inventory bruteMaxBound(Inventory& possibility);
-
-	void bruteMinBound();
+	
+	//This next section is my failed code. I left it in because I discuss it in my paper. Please note that some of it does not work. Other parts work just fine but gave me nominal or no efficiency gain
+	/*void bruteMinBound();
 	Inventory bruteMinBound(Inventory& possibility);
 
 	void bruteDoubleBound();
@@ -31,12 +33,12 @@ public:
 
 	void prepare();
 
-	Inventory greedy();
+	Inventory greedy();*/
 	void print()											{cout << n << endl; greatest.print(itemList);}
 
 private:
-	long long n;
+	long long n;//used to see how many recursive calls are made per algorithm
 	Inventory greatest;
-	double greedyVal;
+	//double greedyVal;//was used when I was planning on using greedy. Now depreciated
 	vector<Item> itemList;
 };

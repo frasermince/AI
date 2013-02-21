@@ -1,4 +1,4 @@
-class Item{
+class Item{//simple class that holds weight and value pairs
 public:
 	Item()									{weight = 0; value = 0; ratio = 0;}
 	Item(double w, double v)				{weight = w; value = v; ratio = 0;}

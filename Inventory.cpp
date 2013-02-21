@@ -7,7 +7,7 @@ using namespace std;
 
 Inventory::Inventory(int w, int num){
 	max = num;
-	low = false;
+	//low = false;
 	rev = false;
 	fin = false;
 	length = 0;
@@ -16,7 +16,7 @@ Inventory::Inventory(int w, int num){
 }
 
 Inventory::Inventory(const Inventory& other){
-	low = other.low;
+	//low = other.low;
 	length = other.getLength();
 	weightLimit = other.getWeightLimit();
 	greatest = other.greatest;
@@ -27,7 +27,7 @@ Inventory::Inventory(const Inventory& other){
 }
 
 Inventory Inventory::operator=(const Inventory& other){
-	low = other.low;
+	//low = other.low;
 	length = other.getLength();
 	weightLimit = other.getWeightLimit();
 	greatest = other.greatest;
@@ -39,7 +39,7 @@ Inventory Inventory::operator=(const Inventory& other){
 	//cout << options[length] << endl;
 }
 
-bool Inventory::push(bool check, vector<Item>& itemList){
+bool Inventory::push(bool check, vector<Item>& itemList){//pushes check onto options adds the length value of itemList to greatest as needed
 	bool win;
 	int input;
 	if(rev)
@@ -52,9 +52,9 @@ bool Inventory::push(bool check, vector<Item>& itemList){
 		newWeight = greatest.getWeight();
 	else
 		newWeight = greatest.getWeight() + itemList[input].getWeight();
-
-	if (newWeight <= weightLimit xor rev) {
-		if(check){ 
+	// notice that even if I specify true it will still push false if it goes overweight or in the case of rev is already underweight
+	if (newWeight <= weightLimit xor rev) {//when rev is on we are starting from the top and working down otherwise we are working up
+		if(check){ //only want to change greatest if check is true. Otherwise we are not taking this item
 			if (!rev)
 				greatest.addTo(itemList[input].getWeight(), itemList[input].getValue());
 			else{
@@ -87,7 +87,7 @@ bool Inventory::push(bool check, vector<Item>& itemList){
 	//cout << endl;
 }
 
-void Inventory::print(vector<Item>& itemList)	const{
+void Inventory::print(vector<Item>& itemList)	const{//prints the inventory
 	cout << "Greatest = " << greatest.getValue() << endl;
 	int count;
 	if(rev)
@@ -100,17 +100,17 @@ void Inventory::print(vector<Item>& itemList)	const{
 	}
 }
 
-void Inventory::reset(){
+void Inventory::reset(){//clears the inventory for reuse
 	fin = false;
 	rev = false;
 	length = 0;
 	options.reset();
 	greatest.reset();
-	low = false;
+	//low = false;
 }
 
 void Inventory::reversal(double weight, double value){//makes it so the inventory starts with all items and items are removed
 	rev = true;
 	length = max;
-	greatest.set(weight, value);
+	greatest.set(weight, value);//puts everything within greatest
 }

@@ -7,116 +7,52 @@
 using namespace std;
 
 
-void Knapsack::bruteForce(){
-	greatest.reset();
+void Knapsack::bruteForce(){//simple brute force implementation. No pruning
+	greatest.reset();//resets greatest so that multiple pruning methods can be called in a rwo
 	n = 0;
-	greatest = bruteForce(greatest);
+	greatest = bruteForce(greatest);//calls a helper function that does all the work
+	//print could theoretically be put here but it would mess up the timing. I am manually doing it from main after I determine my timing.
 }
 
 Inventory Knapsack::bruteForce(Inventory& possibility){
 	n++;
-	Inventory copy = possibility;
-	//cout << "check" << endl;
-	if (possibility.getLength() == itemList.size()){
-		//cout << "base "; 
-		//possibility.print(itemList); 
-		//cout << endl;
+	Inventory reject = possibility;//copy Inventory
+	if (possibility.isFin()){//base case
 		return possibility;
 	}
+	possibility.push(true, itemList);//pushes true onto the bitset for the kth item and adds the k weight and value to the current Item within inventory
+	possibility = bruteForce(possibility);//recursive call for true
+	reject.push(false, itemList);//Puts false onto bitset
+	reject = bruteForce(reject);
 
-	
-	//possibility.print(itemList);
-	possibility.push(true, itemList);
-	possibility = bruteForce(possibility);
-	copy.push(false, itemList);
-	copy = bruteForce(copy);
-	//cout << "compare" << copy.getGreatest().value << " and " << possibility.getGreatest().value << endl;
-
-	if (copy.getGreatest().getValue() >= possibility.getGreatest().getValue()){
-		//copy.print(itemList);
-		return copy;
+	if (reject.getGreatest().getValue() >= possibility.getGreatest().getValue()){
+		return reject;
 	}
 	else{
-		//possibility.print(itemList);
 		return possibility;
 	}
 }
 
-
-void Knapsack::reversalPrune(){
-	greatest.reset();
-	double total = 0; double valTotal = 0;;
-	for(int i = 0; i < itemList.size(); i++){
-		total += itemList[i].getWeight();
-		valTotal += itemList[i].getValue();
-	}
-	if (total/2 <= (double)greatest.getWeightLimit()){
-		greatest.reversal(total, valTotal);
-	}
-	n = 0;
-	greatest = reversalPrune(greatest);
-	if(greatest.getGreatest().getWeight() > greatest.getWeightLimit())
-		greatest.reset();
-	greatest.flip();
-}
-
-Inventory Knapsack::reversalPrune(Inventory& possibility){
-	n++;
-	Inventory copy = possibility;
-	//cout << "check" << endl;
-	if (possibility.isFin()){
-		//cout << "base "; 
-		//possibility.print(itemList); 
-		//cout << endl;
-		return possibility;
-	}
-
-	//possibility.print(itemList);
-	if(possibility.push(true, itemList))
-		possibility = reversalPrune(possibility);
-	if(copy.push(false, itemList))
-		copy = reversalPrune(copy);
-	//cout << "compare" << copy.getGreatest().value << " and " << possibility.getGreatest().value << endl;
-
-	if (possibility.getGreatest().getValue() >= copy.getGreatest().getValue() || copy.getGreatest().getWeight() > copy.getWeightLimit()){
-		//copy.print(itemList);
-		return possibility;
-	}
-	else{
-		//possibility.print(itemList);
-		return copy;
-	}
-}
-
-void Knapsack::bruteMaxBound(){
+void Knapsack::maxBound(){//Simple pruning that cuts off any recursive calls that cause the current weight and value to go over limit
 	n = 0;
 	greatest.reset();
-	greatest = bruteMaxBound(greatest);
+	greatest = maxBound(greatest);
 }
 
-Inventory Knapsack::bruteMaxBound(Inventory& possibility){
+Inventory Knapsack::maxBound(Inventory& possibility){
 	n++;
 	Inventory accepted = possibility;
 	bool one;
 	bool two;
-	//cout << "check" << endl;
 	if (possibility.isFin()){
 		return possibility;
 	}
 	one = accepted.push(true, itemList);
 	two = possibility.push(false, itemList);
-	//possibility.print(itemList);
 	if(one)
-		accepted = bruteMaxBound(accepted);
-	possibility = bruteMaxBound(possibility);
+		accepted = maxBound(accepted);
+	possibility = maxBound(possibility);
 
-	//accepted.print(itemList);
-	//
-	//accepted.print(itemList);
-	//cout << endl << "<" << endl;
-	//rejected.print(itemList);
-	//cout << endl;
-	//cout << "compare" << copy.getGreatest().value << " and " << possibility.getGreatest().value << endl;
 	if ((accepted.getGreatest().getValue() >= possibility.getGreatest().getValue()) && one){
 		return accepted;
 	}
@@ -124,7 +60,49 @@ Inventory Knapsack::bruteMaxBound(Inventory& possibility){
 		return possibility;
 }
 
-void Knapsack::bruteMinBound(){
+
+void Knapsack::reversalPrune(){//Pruning that starts Inventory containing everything and works backwards if over half the items are needed to fill the bag
+	greatest.reset();
+	double total = 0; double valTotal = 0;;
+	for(int i = 0; i < itemList.size(); i++){//gets the sum of all the items
+		total += itemList[i].getWeight();
+		valTotal += itemList[i].getValue();
+	}
+	if (total/2 <= (double)greatest.getWeightLimit()){//checks if the knapsack needs over half the items to be full
+		greatest.reversal(total, valTotal);
+	}
+	n = 0;
+	greatest = reversalPrune(greatest);
+	if(greatest.getGreatest().getWeight() > greatest.getWeightLimit())
+		greatest.reset();
+	if(rev)
+		greatest.flip();
+}
+
+Inventory Knapsack::reversalPrune(Inventory& possibility){//this part is fairly standard. The interesting stuff happens in the other reversalPrune function and within inventory
+	n++;
+	Inventory copy = possibility;
+	if (possibility.isFin()){
+		return possibility;
+	}
+
+	if(possibility.push(true, itemList))
+		possibility = reversalPrune(possibility);
+	if(copy.push(false, itemList))
+		copy = reversalPrune(copy);
+
+	if (possibility.getGreatest().getValue() >= copy.getGreatest().getValue() || copy.getGreatest().getWeight() > copy.getWeightLimit()){
+		return possibility;
+	}
+	else{
+		return copy;
+	}
+}
+
+
+
+//This next section is my failed code. I left it in because I discuss it in my paper. Please note that some of it does not work. Other parts work just fine but gave me nominal or no efficiency gain.
+/*void Knapsack::bruteMinBound(){
 	n = 0;
 	greatest.reset();
 	greatest = bruteMinBound(greatest);
@@ -133,7 +111,6 @@ void Knapsack::bruteMinBound(){
 Inventory Knapsack::bruteMinBound(Inventory& possibility){
 	n++;
 	Inventory copy = possibility;
-	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
 		if(possibility.getGreatest() < greatest.getGreatest()){
 			possibility.setLow();
@@ -142,12 +119,10 @@ Inventory Knapsack::bruteMinBound(Inventory& possibility){
 	}
 
 	
-	//possibility.print(itemList);
 	possibility.push(true, itemList) == true;
 	possibility = bruteMinBound(possibility);
 	copy.push(false, itemList) == true;
 	copy = bruteMinBound(copy);
-	//cout << "compare" << copy.getGreatest().value << " and " << possibility.getGreatest().value << endl;
 	if (!copy.isLow() && copy.getGreatest().getValue() >= possibility.getGreatest().getValue()){
 		return copy;
 	}
@@ -164,7 +139,6 @@ void Knapsack::bruteDoubleBound(){
 Inventory Knapsack::bruteDoubleBound(Inventory& possibility){
 	n++;
 	Inventory copy = possibility;
-	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
 		if(possibility.getGreatest() < greatest.getGreatest()){
 			possibility.setLow();
@@ -173,12 +147,10 @@ Inventory Knapsack::bruteDoubleBound(Inventory& possibility){
 	}
 
 	
-	//possibility.print(itemList);
 	if(possibility.push(true, itemList) == true)
 		possibility = bruteDoubleBound(possibility);
 	if(copy.push(false, itemList) == true)
 		copy = bruteDoubleBound(copy);
-	//cout << "compare" << copy.getGreatest().value << " and " << possibility.getGreatest().value << endl;
 	if (!copy.isLow() && copy.getGreatest().getValue() >= possibility.getGreatest().getValue()){
 		return copy;
 	}
@@ -201,7 +173,6 @@ Inventory Knapsack::bruteGreedy(Inventory& possibility){
 	Inventory copy = possibility;
 	bool one;
 	bool two;
-	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
 		return possibility;
 	}
@@ -209,20 +180,16 @@ Inventory Knapsack::bruteGreedy(Inventory& possibility){
 	copy.push(false, itemList);
 	
 	one = (double)possibility.getGreatest().getValue() <= greedyVal;
-	//two = (double)copy.getGreatest().getValue() <= greedyVal;
 	if(one)
 		possibility = bruteGreedy(possibility);
 	else
 		cout << (double)possibility.getGreatest().getValue() << " > " << greedyVal << endl;
 	copy = bruteGreedy(copy);
-	//cout << "compare" << copy.getGreatest().value << " and " << possibility.getGreatest().value << endl;
 
 	if (possibility.getGreatest().getValue() >= copy.getGreatest().getValue() && one){
-		//copy.print(itemList);
 		return possibility;
 	}
 	else{
-		//possibility.print(itemList);
 		return copy;
 	}
 }
@@ -242,29 +209,21 @@ void Knapsack::bruteDoubleGreedy(){
 Inventory Knapsack::bruteDoubleGreedy(Inventory& possibility){
 	n++;
 	Inventory copy = possibility;
-	//cout << "check" << endl;
 	if (possibility.getLength() == itemList.size()){
-		//cout << "base "; 
-		//possibility.print(itemList); 
-		//cout << endl;
 		return possibility;
 	}
 
 	
-	//possibility.print(itemList);
 	
 	if(possibility.push(true, itemList) && (double)possibility.getGreatest().getValue() <= greedyVal)
 		possibility = bruteDoubleGreedy(possibility);
 	if(copy.push(false, itemList) && (double)copy.getGreatest().getValue() <= greedyVal)
 		copy = bruteDoubleGreedy(copy);
-	//cout << "compare" << copy.getGreatest().value << " and " << possibility.getGreatest().value << endl;
 
 	if (copy.getGreatest().getValue() >= possibility.getGreatest().getValue()){
-		//copy.print(itemList);
 		return copy;
 	}
 	else{
-		//possibility.print(itemList);
 		return possibility;
 	}
 }
@@ -273,12 +232,8 @@ void Knapsack::prepare(){
 	Item temp = greedy().getGreatest();
 	double weight = temp.getWeight();
 	double value = temp.getValue();
-	cout << "weight: " << weight << endl;
-	cout << "value: " << value << endl;
 	double limit = greatest.getWeightLimit();
-	cout << "Fraction = " << (limit/weight) << endl;
 	value *= (limit/weight);
-	cout << "Max = " << value << endl;
 	greedyVal = value;
 }
 
@@ -295,5 +250,5 @@ Inventory Knapsack::greedy(){
 		}
 	}
 	return greatest;
-}
+}*/
 

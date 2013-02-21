@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(){
-	int num = 30;
+	int num = 35;
 	vector<Item> itemList;
 	Item temp();
 	/*Item one(23,92);
