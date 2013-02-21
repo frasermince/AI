@@ -12,7 +12,7 @@ public:
 	Inventory operator=(const Inventory& other);
 	int getLength()	const				{return length;}
 	int getWeightLimit()	const 		{return weightLimit;}
-	Item getGreatest()	const 			{return greatest;}
+	Item getGreatest()	const 			{return optimum;}
 	void print(vector<Item>& itemList)	const;
 	void reset();
 	//void setLow()						{low = true;}
@@ -26,7 +26,7 @@ private:
 	int max;
 	int weightLimit;
 	bitset<64> options;//power of 2 for efficiency sake
-	Item greatest;
+	Item optimum;
 	//bool low; originially used for bruteMin. No longer in user
 	bool rev;//see reversal function
 	bool fin;//determines if the base case has been reached

@@ -1,0 +1,1 @@
+g++ Item.cpp Inventory.cpp Knapsack.cpp main.cpp -Wall -Wextra

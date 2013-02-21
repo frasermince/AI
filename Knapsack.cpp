@@ -8,8 +8,7 @@ using namespace std;
 
 
 void Knapsack::bruteForce(){//simple brute force implementation. No pruning
-	greatest.reset();//resets greatest so that multiple pruning methods can be called in a rwo
-	n = 0;
+	reset();//resets greatest so that multiple pruning methods can be called in a rwo;
 	greatest = bruteForce(greatest);//calls a helper function that does all the work
 	//print could theoretically be put here but it would mess up the timing. I am manually doing it from main after I determine my timing.
 }
@@ -34,8 +33,7 @@ Inventory Knapsack::bruteForce(Inventory& possibility){
 }
 
 void Knapsack::maxBound(){//Simple pruning that cuts off any recursive calls that cause the current weight and value to go over limit
-	n = 0;
-	greatest.reset();
+	reset();
 	greatest = maxBound(greatest);
 }
 
@@ -51,9 +49,10 @@ Inventory Knapsack::maxBound(Inventory& possibility){
 	two = possibility.push(false, itemList);
 	if(one)
 		accepted = maxBound(accepted);
-	possibility = maxBound(possibility);
+	if(two)
+		possibility = maxBound(possibility);
 
-	if ((accepted.getGreatest().getValue() >= possibility.getGreatest().getValue()) && one){
+	if (accepted.getGreatest().getValue() >= possibility.getGreatest().getValue()){
 		return accepted;
 	}
 	else
@@ -62,20 +61,19 @@ Inventory Knapsack::maxBound(Inventory& possibility){
 
 
 void Knapsack::reversalPrune(){//Pruning that starts Inventory containing everything and works backwards if over half the items are needed to fill the bag
-	greatest.reset();
+	reset();
 	double total = 0; double valTotal = 0;;
-	for(int i = 0; i < itemList.size(); i++){//gets the sum of all the items
+	for(int i = 0; i < (int)itemList.size(); i++){//gets the sum of all the items
 		total += itemList[i].getWeight();
 		valTotal += itemList[i].getValue();
 	}
 	if (total/2 <= (double)greatest.getWeightLimit()){//checks if the knapsack needs over half the items to be full
 		greatest.reversal(total, valTotal);
 	}
-	n = 0;
 	greatest = reversalPrune(greatest);
-	if(greatest.getGreatest().getWeight() > greatest.getWeightLimit())
+	if(greatest.getGreatest().getWeight() >= greatest.getWeightLimit())
 		greatest.reset();
-	if(rev)
+	if(greatest.isRev())
 		greatest.flip();
 }
 
@@ -99,7 +97,10 @@ Inventory Knapsack::reversalPrune(Inventory& possibility){//this part is fairly 
 	}
 }
 
-
+void Knapsack::reset(){
+	n = 0;
+	greatest.reset();
+}
 
 //This next section is my failed code. I left it in because I discuss it in my paper. Please note that some of it does not work. Other parts work just fine but gave me nominal or no efficiency gain.
 /*void Knapsack::bruteMinBound(){
@@ -235,20 +236,19 @@ void Knapsack::prepare(){
 	double limit = greatest.getWeightLimit();
 	value *= (limit/weight);
 	greedyVal = value;
-}
+}*/
 
 Inventory Knapsack::greedy(){
 	greatest.reset();
-	for(int i = 0; i < itemList.size(); i++){
+	for(int i = 0; i < (int)itemList.size(); i++){
 		itemList[i].setRatio(itemList[i].getWeight() / itemList[i].getValue());
 	}
-	int temp = itemList.size() - 1;
 	sort(itemList.begin(), itemList.end());
-	for(int j = 0; j < itemList.size(); j++){
+	for(int j = 0; j < (int)itemList.size(); j++){
 		if(greatest.push(true, itemList) == false){
 			break;
 		}
 	}
 	return greatest;
-}*/
+}
 

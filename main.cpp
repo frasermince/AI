@@ -9,7 +9,7 @@
 using namespace std;
 
 int main(){
-	int num = 35;
+	int num = 15;//must specify number of items here
 	vector<Item> itemList;
 	Item temp();
 	/*Item one(23,92);
@@ -33,68 +33,44 @@ int main(){
 	itemList.push_back(nine);
 	itemList.push_back(ten);*/
 	fstream file;
-	file.open("/Users/Fraser/Desktop/Programming/Artificial Intelligence/AI/k_basic/k35.txt", fstream::in);
+	file.open("/Users/Fraser/Desktop/Programming/Artificial Intelligence/AI/k_basic/k15.txt", fstream::in);//must change this to change input
 	int maxWeight;
 	file >> maxWeight;
 	double weight;
 	double value;
+	string name;
 	for(int i = 0; i < num; i++){
-		file >> weight; file >> value;
+		file >> weight; file >> value; file >> name;
 		itemList.push_back(Item(weight, value));
 	}
 	Knapsack a(maxWeight, itemList);
+
+
 	clock_t t;
+
+	t = clock();
+	a.greedy();
+	cout << "greedy: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
+	a.print();
+	cout << endl << endl;
+
 	t = clock();
 	a.reversalPrune();
 	cout << "reversalPrune: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
-
 	a.print();
 	cout << endl << endl;
 	
 	t = clock();
 	a.bruteForce();
 	cout << "BruteForce: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
-
 	a.print();
 	cout << endl << endl;
 
 	
 
 	t = clock();
-	a.bruteMaxBound();
-	cout << "bruteMaxBound: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
-
+	a.maxBound();
+	cout << "maxBound: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
 	a.print();
 	cout << endl << endl;
-	
-	/*t = clock();
-	a.bruteMinBound();
-	cout << "bruteMinBound: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
-
-	a.print();
-	cout << endl << endl;
-
-	t = clock();
-	a.bruteDoubleBound();
-	cout << "bruteDoubleBound: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
-
-	a.print();
-	cout << endl << endl;
-
-	t = clock();
-	a.bruteGreedy();
-	cout << "bruteGreedy: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
-
-	a.print();
-	cout << endl << endl;
-
-	t = clock();
-	.bruteDoubleGreedy();
-	cout << "bruteDoubleGreedy: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
-	
-	a.print();
-	cout << endl << endl;*/
-	//cout << endl;
-	//cout << temp.getGreatest().value << endl << temp.getGreatest().weight << endl;
-
 }

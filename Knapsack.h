@@ -7,7 +7,7 @@ using namespace std;
 
 class Knapsack{
 public:
-	Knapsack(int w, vector<Item> list)	: greatest(w,list.size())		{itemList = list; greedyVal = 0; n = 0;}
+	Knapsack(int w, vector<Item> list)	: greatest(w,list.size())		{itemList = list; n = 0;}
 	void bruteForce();
 	Inventory bruteForce(Inventory& possibility);
 
@@ -16,7 +16,7 @@ public:
 
 	void reversalPrune();
 	Inventory reversalPrune(Inventory& possibility);
-
+	void reset();
 	
 	//This next section is my failed code. I left it in because I discuss it in my paper. Please note that some of it does not work. Other parts work just fine but gave me nominal or no efficiency gain
 	/*void bruteMinBound();
@@ -31,10 +31,10 @@ public:
 	void bruteDoubleGreedy();
 	Inventory bruteDoubleGreedy(Inventory& possibility);
 
-	void prepare();
+	void prepare();*/
 
-	Inventory greedy();*/
-	void print()											{cout << n << endl; greatest.print(itemList);}
+	Inventory greedy();
+	void print()											{cout << "Number of recursive calls: " << n << endl; greatest.print(itemList);}
 
 private:
 	long long n;//used to see how many recursive calls are made per algorithm
