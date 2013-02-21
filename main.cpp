@@ -33,7 +33,7 @@ int main(){
 	itemList.push_back(nine);
 	itemList.push_back(ten);*/
 	fstream file;
-	file.open("/Users/Fraser/Desktop/Programming/Artificial Intelligence/AI/k_basic/k30.txt", fstream::in);
+	file.open("/Users/Fraser/Desktop/Programming/Artificial Intelligence/AI/k_basic/k35.txt", fstream::in);
 	int maxWeight;
 	file >> maxWeight;
 	double weight;
@@ -50,7 +50,7 @@ int main(){
 
 	a.print();
 	cout << endl << endl;
-
+	
 	t = clock();
 	a.bruteForce();
 	cout << "BruteForce: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
@@ -60,12 +60,12 @@ int main(){
 
 	
 
-	/*t = clock();
+	t = clock();
 	a.bruteMaxBound();
 	cout << "bruteMaxBound: " << (float) clock()/CLOCKS_PER_SEC - (float)t/CLOCKS_PER_SEC << endl;
 
 	a.print();
-	cout << endl << endl;*/
+	cout << endl << endl;
 	
 	/*t = clock();
 	a.bruteMinBound();

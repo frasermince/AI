@@ -100,7 +100,7 @@ Inventory Knapsack::bruteMaxBound(Inventory& possibility){
 	bool one;
 	bool two;
 	//cout << "check" << endl;
-	if (possibility.getLength() == itemList.size()){
+	if (possibility.isFin()){
 		return possibility;
 	}
 	one = accepted.push(true, itemList);
@@ -108,8 +108,7 @@ Inventory Knapsack::bruteMaxBound(Inventory& possibility){
 	//possibility.print(itemList);
 	if(one)
 		accepted = bruteMaxBound(accepted);
-	if(two)
-		possibility = bruteMaxBound(possibility);
+	possibility = bruteMaxBound(possibility);
 
 	//accepted.print(itemList);
 	//

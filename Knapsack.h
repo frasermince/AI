@@ -35,7 +35,7 @@ public:
 	void print()											{cout << n << endl; greatest.print(itemList);}
 
 private:
-	int n;
+	long long n;
 	Inventory greatest;
 	double greedyVal;
 	vector<Item> itemList;

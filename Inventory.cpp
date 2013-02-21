@@ -94,7 +94,7 @@ void Inventory::print(vector<Item>& itemList)	const{
 		count = max - length;
 	else
 		count = length;
-	cout << "length = " << count << endl;
+	cout << "length = " << itemList.size() << endl;
 	for (int i = 0; i < itemList.size(); i++){
 		cout << options[i] << " ";
 	}
